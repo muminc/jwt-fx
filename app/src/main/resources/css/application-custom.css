@@ -1,0 +1,38 @@
+.jfx-button-red:hover{
+    -fx-background-color:red !important;
+}
+
+.jfx-button-yellow:hover{
+    -fx-background-color:gray !important;
+}
+
+.jfx-button-green:hover{
+    -fx-background-color:gray !important;
+}
+
+/*******************************************************************************
+
+*                           BorderLessScene                            *
+
+******************************************************************************/
+
+.tab {
+    -fx-pref-width: 180
+}
+
+
+/*.tab-pane .tab-header-area .tab-header-background {*/
+/*    -fx-opacity: 0;*/
+/*    -fx-background-color: pink;*/
+/*}*/
+
+/*create more space for our custom to overlayed ontop here*/
+.tab-pane .tab-header-area .control-buttons-tab{
+    -fx-min-width: 30px;
+    -fx-padding: 4px;
+}
+
+/*hide the default button for tabpane*/
+.tab-pane .tab-header-area .control-buttons-tab .tab-down-button {
+    -fx-opacity: 0;
+}
