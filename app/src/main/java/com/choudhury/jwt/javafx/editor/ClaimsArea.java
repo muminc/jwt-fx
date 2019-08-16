@@ -24,7 +24,7 @@ public class ClaimsArea extends BorderPane {
 
 
     private final StyleClassedTextArea area;
-    Label popupMsg = new Label();
+    private Label popupMsg = new Label();
     private StringProperty expireProperty = new SimpleStringProperty();
 
     public ClaimsArea() {
