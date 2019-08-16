@@ -1,11 +1,8 @@
-package com.choudhury.jwt.javafx;
+package com.choudhury.jwt.fx;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import lombok.SneakyThrows;
-
-import java.awt.*;
 
 public class FXUtils {
 

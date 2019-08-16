@@ -1,6 +1,6 @@
-package com.choudhury.jwt.javafx.jwt;
+package com.choudhury.jwt.fx.jwt;
 
-import com.choudhury.jwt.javafx.TabPaneWithAdd;
+import com.choudhury.jwt.fx.TabPaneWithAdd;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

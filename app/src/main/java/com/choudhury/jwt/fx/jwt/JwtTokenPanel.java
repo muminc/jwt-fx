@@ -1,13 +1,13 @@
-package com.choudhury.jwt.javafx.jwt;
+package com.choudhury.jwt.fx.jwt;
 
-import com.choudhury.jwt.javafx.editor.ClaimsArea;
-import com.choudhury.jwt.javafx.editor.EditorArea;
-import com.choudhury.jwt.javafx.editor.SignatureArea;
-import com.choudhury.jwt.javafx.editor.TestInputWindow;
-import com.choudhury.jwt.javafx.jwt.model.JWTEditorModel;
-import com.choudhury.jwt.javafx.jwt.model.JWTWindowModel;
-import com.choudhury.jwt.javafx.model.TaskModel;
-import com.choudhury.jwt.javafx.progress.ProgressPane;
+import com.choudhury.jwt.fx.editor.ClaimsArea;
+import com.choudhury.jwt.fx.editor.EditorArea;
+import com.choudhury.jwt.fx.editor.SignatureArea;
+import com.choudhury.jwt.fx.editor.TestInputWindow;
+import com.choudhury.jwt.fx.jwt.model.JWTEditorModel;
+import com.choudhury.jwt.fx.jwt.model.JWTWindowModel;
+import com.choudhury.jwt.fx.model.TaskModel;
+import com.choudhury.jwt.fx.progress.ProgressPane;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;

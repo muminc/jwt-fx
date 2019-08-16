@@ -2,11 +2,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.choudhury.jwt-javafx</groupId>
+    <groupId>com.choudhury.jwt-fx</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>jwt-javafx-parent</name>
+    <name>jwt-fx-parent</name>
 
     <repositories>
         <repository>
@@ -15,7 +15,7 @@
         </repository>
     </repositories>
 
-    <description>JavaFX Token</description>
+    <description>JWT FX Parent</description>
 
     <dependencies>
 

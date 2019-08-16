@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.choudhury.jwt-javafx</groupId>
+        <groupId>com.choudhury.jwt-fx</groupId>
         <artifactId>parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.choudhury.jwt-javafx</groupId>
+            <groupId>com.choudhury.jwt-fx</groupId>
             <artifactId>app</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -35,11 +35,11 @@
                         </goals>
                         <configuration>
                             <headerType>gui</headerType>
-                            <outfile>target/jwt-javafx.exe</outfile>
+                            <outfile>target/jwt-fx.exe</outfile>
                             <errTitle>Mumin</errTitle>
                             <icon>src/bin/win/ticket.ico</icon>
                             <classPath>
-                                <mainClass>com.choudhury.jwt.javafx.MainApp</mainClass>
+                                <mainClass>com.choudhury.jwt.fx.MainApp</mainClass>
                                 <addDependencies>false</addDependencies>
                                 <preCp>app.jar</preCp>
                             </classPath>
@@ -72,13 +72,13 @@
                             <versionInfo>
                                 <fileVersion>2.0.0.0</fileVersion>
                                 <txtFileVersion>2.0.0.0</txtFileVersion>
-                                <fileDescription>jwt-javafx</fileDescription>
+                                <fileDescription>jwt-fx</fileDescription>
                                 <copyright>copyright</copyright>
                                 <productVersion>2.0.0.0</productVersion>
                                 <txtProductVersion>2.0.0.0</txtProductVersion>
-                                <productName>jwt-javafx</productName>
-                                <internalName>jwt-javafx</internalName>
-                                <originalFilename>jwt-javafx.exe</originalFilename>
+                                <productName>jwt-fx</productName>
+                                <internalName>jwt-fx</internalName>
+                                <originalFilename>jwt-fx.exe</originalFilename>
                             </versionInfo>
                         </configuration>
                     </execution>

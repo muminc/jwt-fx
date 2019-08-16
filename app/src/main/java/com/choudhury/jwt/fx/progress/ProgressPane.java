@@ -1,6 +1,6 @@
-package com.choudhury.jwt.javafx.progress;
+package com.choudhury.jwt.fx.progress;
 
-import com.choudhury.jwt.javafx.model.TaskModel;
+import com.choudhury.jwt.fx.model.TaskModel;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.application.Platform;

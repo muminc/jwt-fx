@@ -1,4 +1,4 @@
-package com.choudhury.jwt.javafx.editor;
+package com.choudhury.jwt.fx.editor;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

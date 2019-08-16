@@ -1,4 +1,4 @@
-package com.choudhury.jwt.javafx;
+package com.choudhury.jwt.fx;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;

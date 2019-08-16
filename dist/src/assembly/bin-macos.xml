@@ -5,7 +5,7 @@
 	<formats>
 		<format>tgz</format>
 	</formats>
-	<baseDirectory>jwt-javafx-${project.version}</baseDirectory>
+	<baseDirectory>jwt-fx-${project.version}</baseDirectory>
 
 	<fileSets>
 		<fileSet>
@@ -39,7 +39,7 @@
 			<useAllReactorProjects>true</useAllReactorProjects>
 
 			<includes>
-				<include>com.choudhury.jwt-javafx:app</include>
+				<include>com.choudhury.jwt-fx:app</include>
 			</includes>
 			<binaries>
 				<outputDirectory>./</outputDirectory>
@@ -52,7 +52,7 @@
 		<moduleSet>
 			<useAllReactorProjects>true</useAllReactorProjects>
 			<includes>
-				<include>com.choudhury.jwt-javafx:app</include>
+				<include>com.choudhury.jwt-fx:app</include>
 			</includes>
 			<binaries>
 				<unpack>false</unpack>

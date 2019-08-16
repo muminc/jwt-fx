@@ -17,7 +17,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane fx:controller="com.choudhury.jwt.javafx.editor.TestInputWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/11.0.1">
+<BorderPane fx:controller="com.choudhury.jwt.fx.editor.TestInputWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/11.0.1">
    <center>
       <GridPane BorderPane.alignment="CENTER" gridLinesVisible="false" hgap="4" vgap="4"  >
         <columnConstraints>

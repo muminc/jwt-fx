@@ -1,7 +1,7 @@
-package com.choudhury.jwt.javafx;
+package com.choudhury.jwt.fx;
 
-import com.choudhury.jwt.javafx.jwt.JWTTabPane;
-import com.choudhury.jwt.javafx.window.TopBar;
+import com.choudhury.jwt.fx.jwt.JWTTabPane;
+import com.choudhury.jwt.fx.window.TopBar;
 import com.goxr3plus.fxborderlessscene.borderless.BorderlessScene;
 import com.goxr3plus.fxborderlessscene.borderless.CustomStage;
 import javafx.application.Application;

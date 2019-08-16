@@ -1,9 +1,9 @@
-package com.choudhury.jwt.javafx.window;
+package com.choudhury.jwt.fx.window;
 
 
 import java.io.IOException;
 
-import com.choudhury.jwt.javafx.MainApp;
+import com.choudhury.jwt.fx.MainApp;
 import com.jfoenix.controls.JFXButton;
 
 import javafx.fxml.FXML;

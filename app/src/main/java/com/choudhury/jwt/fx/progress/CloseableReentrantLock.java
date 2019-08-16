@@ -1,4 +1,4 @@
-package com.choudhury.jwt.javafx.progress;
+package com.choudhury.jwt.fx.progress;
 
 import java.util.concurrent.locks.ReentrantLock;
 

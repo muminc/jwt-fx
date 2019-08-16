@@ -1,4 +1,4 @@
-package com.choudhury.jwt.javafx.model;
+package com.choudhury.jwt.fx.model;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

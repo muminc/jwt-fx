@@ -1,7 +1,7 @@
-package com.choudhury.jwt.javafx.editor;
+package com.choudhury.jwt.fx.editor;
 
-import com.choudhury.jwt.javafx.FXUtils;
-import com.choudhury.jwt.javafx.jwt.model.JWTWindowModel;
+import com.choudhury.jwt.fx.FXUtils;
+import com.choudhury.jwt.fx.jwt.model.JWTWindowModel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

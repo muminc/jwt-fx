@@ -1,4 +1,4 @@
-package com.choudhury.jwt.javafx.window;
+package com.choudhury.jwt.fx.window;
 
 import java.io.IOException;
 import java.net.URL;

@@ -1,6 +1,6 @@
-package com.choudhury.jwt.javafx.jwt;
+package com.choudhury.jwt.fx.jwt;
 
-import com.choudhury.jwt.javafx.jwt.model.JWTWindowModel;
+import com.choudhury.jwt.fx.jwt.model.JWTWindowModel;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressIndicator;

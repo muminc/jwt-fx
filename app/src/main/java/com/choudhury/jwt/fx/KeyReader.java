@@ -1,4 +1,4 @@
-package com.choudhury.jwt.javafx;
+package com.choudhury.jwt.fx;
 
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;

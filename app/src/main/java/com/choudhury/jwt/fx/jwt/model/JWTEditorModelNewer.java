@@ -1,35 +1,20 @@
-package com.choudhury.jwt.javafx.jwt.model;
+package com.choudhury.jwt.fx.jwt.model;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.choudhury.jwt.javafx.KeyReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
-import org.fxmisc.richtext.CaretSelectionBind;
-import org.fxmisc.richtext.GenericStyledArea;
 import org.fxmisc.richtext.model.EditableStyledDocument;
 import org.fxmisc.richtext.model.Paragraph;
 import org.fxmisc.richtext.model.SimpleEditableStyledDocument;
-import org.fxmisc.richtext.model.StyledDocument;
 import org.reactfx.collection.LiveList;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 
 public class JWTEditorModelNewer {
 

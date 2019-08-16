@@ -1,4 +1,4 @@
-package com.choudhury.jwt.javafx;
+package com.choudhury.jwt.fx;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

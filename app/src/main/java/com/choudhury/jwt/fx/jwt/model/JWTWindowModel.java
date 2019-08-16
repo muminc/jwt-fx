@@ -1,6 +1,6 @@
-package com.choudhury.jwt.javafx.jwt.model;
+package com.choudhury.jwt.fx.jwt.model;
 
-import com.choudhury.jwt.javafx.model.TaskModel;
+import com.choudhury.jwt.fx.model.TaskModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
