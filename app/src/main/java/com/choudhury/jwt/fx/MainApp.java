@@ -1,16 +1,26 @@
 package com.choudhury.jwt.fx;
 
+import com.choudhury.jwt.fx.config.AppSettings;
 import com.choudhury.jwt.fx.jwt.JWTTabPane;
 import com.choudhury.jwt.fx.window.TopBar;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.goxr3plus.fxborderlessscene.borderless.BorderlessScene;
 import com.goxr3plus.fxborderlessscene.borderless.CustomStage;
 import javafx.application.Application;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainApp extends Application {
@@ -24,7 +34,30 @@ public class MainApp extends Application {
     public static BorderlessScene borderlessScene;
 
     private final int screenMinWidth = 800, screenMinHeight = 600;
+    private AppSettings appSettings;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private JWTTabPane tabPaneWithAdd;
+    private File appSettingsFileName;
+
+
+    private AppSettings loadAppSettings(){
+        if (appSettingsFileName.exists()) {
+            try (InputStream fileStream = new FileInputStream(appSettingsFileName)) {
+                return objectMapper.readValue(fileStream, AppSettings.class);
+            }
+            catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new AppSettings();
+    }
+
+    @Override
+    public void init() {
+        appSettingsFileName = new File("app.json");
+        appSettings = loadAppSettings();
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -36,7 +69,8 @@ public class MainApp extends Application {
         root.setTop(topBar);
 
 
-        root.setCenter(new AddButtonOverlay(new JWTTabPane()));
+        tabPaneWithAdd = new JWTTabPane(appSettings);
+        root.setCenter(new AddButtonOverlay(tabPaneWithAdd));
 
         CustomStage stage = new CustomStage(StageStyle.UNDECORATED);
 
@@ -48,7 +82,7 @@ public class MainApp extends Application {
         window.centerOnScreen();
         //window.getIcons().add(InfoTool.getImageFromResourcesFolder("logo.png"));
         window.centerOnScreen();
-        window.setOnCloseRequest(cl -> System.exit(0));
+        window.setOnCloseRequest(cl -> Platform.exit());
 
         // Borderless Scene
         borderlessScene = new BorderlessScene(window, StageStyle.UNDECORATED, root, screenMinWidth, screenMinHeight);
@@ -63,6 +97,13 @@ public class MainApp extends Application {
         stage.showAndAdjust();
     }
 
+    @Override
+    public void stop() throws Exception {
+        appSettings = new AppSettings();
+        tabPaneWithAdd.updateConfig(appSettings);
+        ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
+        writer.writeValue(appSettingsFileName, appSettings);
+    }
 
     public static void main(String[] args) {
         launch(args);

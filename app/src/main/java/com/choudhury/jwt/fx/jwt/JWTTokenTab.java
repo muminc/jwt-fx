@@ -1,5 +1,6 @@
 package com.choudhury.jwt.fx.jwt;
 
+import com.choudhury.jwt.fx.config.WindowSettings;
 import com.choudhury.jwt.fx.jwt.model.JWTWindowModel;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -16,15 +17,15 @@ public class JWTTokenTab extends Tab {
     private ProgressIndicator busyIndicator;
     private StackPane stackPane;
     private JWTWindowModel jwtWindowModel;
-    private JwtTokenPanel conent;
+    private JwtTokenPanel content;
 
 
     public JWTTokenTab(JWTWindowModel jwtWindowModel) {
         this.jwtWindowModel = jwtWindowModel;
 
-        textProperty().bind(jwtWindowModel.sessionPropertyProperty());
-        conent = new JwtTokenPanel(jwtWindowModel);
-        setContent(conent);
+        textProperty().bind(jwtWindowModel.sessionProperty());
+        content = new JwtTokenPanel(jwtWindowModel);
+        setContent(content);
         stackPane = new StackPane();
         stackPane.setPrefHeight(20);
         stackPane.setPrefWidth(20);
@@ -52,8 +53,11 @@ public class JWTTokenTab extends Tab {
     }
 
     public void executeAction() {
-        conent.executeAction();
+        content.executeAction();
     }
 
+    public void updateConfig(WindowSettings windowSettings) {
+        jwtWindowModel.updateConfig(windowSettings);
+    }
 }
 

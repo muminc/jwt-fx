@@ -46,7 +46,14 @@ public class TestInputWindow extends BorderPane {
         setPadding(new Insets(4));
         Node node = FXUtils.loadAndInitialize("/fxml/InputPanel.fxml", this);
         setCenter(node);
-        sessionName.textProperty().bindBidirectional(jwtWindowModel.sessionPropertyProperty());
+        sessionName.textProperty().bindBidirectional(jwtWindowModel.sessionProperty());
+        clientId.textProperty().bindBidirectional(jwtWindowModel.clientIdProperty());
+        scope.textProperty().bindBidirectional(jwtWindowModel.scopeProperty());
+        oauthURI.textProperty().bindBidirectional(jwtWindowModel.oauthURIProperty());
+        redirectURI.textProperty().bindBidirectional(jwtWindowModel.redirectURIProperty());
+        useKerberos.selectedProperty().bindBidirectional(jwtWindowModel.kerberosProperty());
+        useClientCertificate.selectedProperty().bindBidirectional(jwtWindowModel.clientCertificateProperty());
+        allowUnrestrictedRedirect.selectedProperty().bindBidirectional(jwtWindowModel.unrestrictedRedirectProperty());
         setTextLimit(sessionName,20);
 
     }
@@ -85,3 +92,4 @@ public class TestInputWindow extends BorderPane {
         });
     }
 }
+

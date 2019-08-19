@@ -51,7 +51,7 @@ public class JwtTokenPanel extends BorderPane {
 
         BorderPane mainContent = new BorderPane();
         inputWindow = new TestInputWindow(jwtWindowModel);
-        //mainContent.setTop(inputWindow);
+        mainContent.setTop(inputWindow);
         mainContent.setCenter(horizontalSplit);
 
 

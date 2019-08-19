@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.choudhury.jwt.fx.MainApp;
 import com.jfoenix.controls.JFXButton;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
@@ -54,7 +55,7 @@ public class CloseAppBox extends StackPane {
     maxOrNormalize.setOnAction(ac -> MainApp.borderlessScene.maximizeStage());
 
     // close
-    exitApplication.setOnAction(ac -> System.exit(0));
+    exitApplication.setOnAction(ac -> Platform.exit());
 
   }
 
