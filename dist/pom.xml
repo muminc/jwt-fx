@@ -59,6 +59,7 @@
                                     <opt><![CDATA[--add-exports=javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED]]></opt>
                                     <opt><![CDATA[--add-exports=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED]]></opt>
                                     <opt><![CDATA[--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED]]></opt>
+                                    <opt><![CDATA[--add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED]]></opt>
                                     <opt><![CDATA[--add-exports=javafx.base/com.sun.javafx.reflect=ALL-UNNAMED]]></opt>
                                     <opt><![CDATA[--add-exports=javafx.base/com.sun.javafx.beans=ALL-UNNAMED]]></opt>
                                     <opt><![CDATA[--add-exports=javafx.base/com.sun.javafx.logging=ALL-UNNAMED]]></opt>

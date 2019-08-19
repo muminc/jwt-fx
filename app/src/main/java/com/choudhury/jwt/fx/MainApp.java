@@ -2,6 +2,7 @@ package com.choudhury.jwt.fx;
 
 import com.choudhury.jwt.fx.config.AppSettings;
 import com.choudhury.jwt.fx.jwt.JWTTabPane;
+import com.choudhury.jwt.fx.jwt.api.JWTService;
 import com.choudhury.jwt.fx.window.TopBar;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
+import java.util.ServiceLoader;
 
 
 public class MainApp extends Application {
@@ -39,14 +42,18 @@ public class MainApp extends Application {
     private ObjectMapper objectMapper = new ObjectMapper();
     private JWTTabPane tabPaneWithAdd;
     private File appSettingsFileName;
+    private JWTService jwtService;
 
 
-    private AppSettings loadAppSettings(){
+    private AppSettings loadAppSettings() {
+        ServiceLoader<JWTService> loader = ServiceLoader.load(JWTService.class);
+        Optional<JWTService> first = loader.findFirst();
+        first.ifPresent(service -> jwtService = service);
+
         if (appSettingsFileName.exists()) {
             try (InputStream fileStream = new FileInputStream(appSettingsFileName)) {
                 return objectMapper.readValue(fileStream, AppSettings.class);
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -69,7 +76,7 @@ public class MainApp extends Application {
         root.setTop(topBar);
 
 
-        tabPaneWithAdd = new JWTTabPane(appSettings);
+        tabPaneWithAdd = new JWTTabPane(jwtService, appSettings);
         root.setCenter(new AddButtonOverlay(tabPaneWithAdd));
 
         CustomStage stage = new CustomStage(StageStyle.UNDECORATED);

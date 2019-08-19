@@ -3,6 +3,7 @@ package com.choudhury.jwt.fx.jwt;
 import com.choudhury.jwt.fx.TabPaneWithAdd;
 import com.choudhury.jwt.fx.config.AppSettings;
 import com.choudhury.jwt.fx.config.WindowSettings;
+import com.choudhury.jwt.fx.jwt.api.JWTService;
 import com.choudhury.jwt.fx.jwt.model.JWTWindowModel;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
@@ -20,10 +21,10 @@ public class JWTTabPane extends TabPaneWithAdd {
     private static final String TAB_TITLE = "JWT Tab";
     private final EventHandler<ActionEvent> newTabAction;
     private int tabCounter = 1;
-    private final AppSettings appSettings;
+    private JWTService jwtService;
 
-    public JWTTabPane(AppSettings appSettings) {
-        this.appSettings = appSettings;
+    public JWTTabPane(JWTService jwtService, AppSettings appSettings) {
+        this.jwtService = jwtService;
         setTabDragPolicy(TabDragPolicy.REORDER);
 
         newTabAction = newTabAction -> addNewTab(TAB_TITLE);
@@ -69,7 +70,7 @@ public class JWTTabPane extends TabPaneWithAdd {
 
     private void addNewTab(String title) {
         ObservableList<Tab> tabs = this.getTabs();
-        JWTTokenTab tab = new JWTTokenTab(title + " " + tabCounter++);
+        JWTTokenTab tab = new JWTTokenTab(jwtService,title + " " + tabCounter++);
         tab.setClosable(tabs.size() > 1);
         tabs.add(tab);
         this.getSelectionModel().select(tab);
@@ -79,7 +80,7 @@ public class JWTTabPane extends TabPaneWithAdd {
 
     private void addNewTab(WindowSettings windowSettings) {
         ObservableList<Tab> tabs = this.getTabs();
-        JWTWindowModel jwtWindowModel = new JWTWindowModel(windowSettings);
+        JWTWindowModel jwtWindowModel = new JWTWindowModel(jwtService, windowSettings);
         JWTTokenTab tab = new JWTTokenTab(jwtWindowModel);
         tab.setClosable(tabs.size() > 1);
         tabs.add(tab);

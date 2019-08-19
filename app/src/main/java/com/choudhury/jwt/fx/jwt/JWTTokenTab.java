@@ -1,6 +1,7 @@
 package com.choudhury.jwt.fx.jwt;
 
 import com.choudhury.jwt.fx.config.WindowSettings;
+import com.choudhury.jwt.fx.jwt.api.JWTService;
 import com.choudhury.jwt.fx.jwt.model.JWTWindowModel;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -47,8 +48,8 @@ public class JWTTokenTab extends Tab {
 
     }
 
-    public JWTTokenTab(String text) {
-        this(new JWTWindowModel(text));
+    public JWTTokenTab(JWTService jwtService, String text) {
+        this(new JWTWindowModel(jwtService, text));
 
     }
 

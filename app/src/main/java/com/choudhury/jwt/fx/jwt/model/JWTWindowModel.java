@@ -1,11 +1,13 @@
 package com.choudhury.jwt.fx.jwt.model;
 
 import com.choudhury.jwt.fx.config.WindowSettings;
+import com.choudhury.jwt.fx.jwt.api.JWTService;
 import com.choudhury.jwt.fx.model.TaskModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 
 public class JWTWindowModel {
 
@@ -21,13 +23,17 @@ public class JWTWindowModel {
 
     private TaskModel taskModel;
     private JWTEditorModel jwtEditorModel;
+    private JWTService jwtService;
 
-    public JWTWindowModel(String session) {
+    public JWTWindowModel(JWTService jwtService, String session) {
+        this.jwtService = jwtService;
         this.session.setValue(session);
         this.taskModel = new TaskModel();
+
     }
 
-    public JWTWindowModel(WindowSettings windowSettings) {
+    public JWTWindowModel(JWTService jwtService, WindowSettings windowSettings) {
+        this(jwtService, windowSettings.getSession());
         session.setValue(windowSettings.getSession());
         clientId.setValue(windowSettings.getClientId());
         scope.setValue(windowSettings.getScope());
@@ -36,7 +42,6 @@ public class JWTWindowModel {
         kerberos.setValue(windowSettings.isKerberos());
         clientCertificate.setValue(windowSettings.isClientCertificate());
         unrestrictedRedirect.setValue(windowSettings.isUnrestrictedRedirect());
-        this.taskModel = new TaskModel();
     }
 
 
@@ -127,6 +132,13 @@ public class JWTWindowModel {
         windowSettings.setKerberos(kerberos.getValue());
         windowSettings.setClientCertificate(clientCertificate.getValue());
         windowSettings.setUnrestrictedRedirect(unrestrictedRedirect.getValue());
+    }
+
+    public String obtainToken(){
+        if (jwtService==null){
+            throw new RuntimeException("No JWT Service Implementation has been registered");
+        }
+        return jwtService.obtainToken(getOauthURI(), getRedirectURI(), getClientId(), getScope(), isKerberos(), isClientCertificate(), isUnrestrictedRedirect());
     }
 
 

@@ -7,9 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
@@ -27,8 +27,6 @@ public class TestInputWindow extends BorderPane {
 
     @FXML CheckBox useClientCertificate;
 
-    @FXML
-    ChoiceBox keyStoreSource;
 
     @FXML CheckBox allowUnrestrictedRedirect;
 
@@ -73,11 +71,20 @@ public class TestInputWindow extends BorderPane {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    String token = jwtWindowModel.obtainToken();
+                    Platform.runLater(()->{jwtWindowModel.getTaskModel().setRunning(false); jwtWindowModel.setJWTToken(token);});
                 }
-                Platform.runLater(()->{jwtWindowModel.getTaskModel().setRunning(false); jwtWindowModel.setJWTToken("Foo");});
+                catch (Exception e){
+                    Platform.runLater(()-> {
+                        jwtWindowModel.getTaskModel().setRunning(false);
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setHeaderText("Unable to obtain token");
+                        errorAlert.setContentText(e.getLocalizedMessage());
+                        errorAlert.showAndWait();
+                    });
+
+                }
+
             }
         }).start();
     }
