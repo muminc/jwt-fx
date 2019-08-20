@@ -114,6 +114,7 @@ public class MainApp extends Application {
         tabPaneWithAdd.updateConfig(appSettings);
         ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
         writer.writeValue(appSettingsFileName, appSettings);
+        System.exit(0);
     }
 
     public static void main(String[] args) {
