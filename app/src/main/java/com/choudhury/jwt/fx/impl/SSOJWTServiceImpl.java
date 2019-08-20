@@ -150,6 +150,9 @@ public class SSOJWTServiceImpl implements JWTService {
                 final String response = EntityUtils.toString(entity);
                 logger.debug("Response : "+response);
             }
+            if (result.accessToken == null){
+                throw new RuntimeException("Unable to obtain access token");
+            }
             return result.accessToken;
         }
         catch (Exception e){
