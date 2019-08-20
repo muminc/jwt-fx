@@ -22,12 +22,14 @@ public class SignatureArea extends BorderPane {
 
         signatureStatus = new TextField();
         signatureStatus.setEditable(false);
+        signatureStatus.setId("signature-status");
 
         errorMessage = new TextField();
         errorMessage.setEditable(false);
         errorMessage.setVisible(false);
 
         signatureTextArea = new TextArea();
+        signatureTextArea.setId("signature-area");
         signatureTextArea.textProperty().addListener((observable, oldValue, newValue) -> updateSignatureStatus(signatureOk.get()));
 
         signatureOk.addListener((observable, oldValue, newValue) -> updateSignatureStatus(newValue));

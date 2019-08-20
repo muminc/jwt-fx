@@ -17,16 +17,20 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
 
 public class MainApp extends Application {
+
+    private Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static Stage window;
 
@@ -53,8 +57,8 @@ public class MainApp extends Application {
         if (appSettingsFileName.exists()) {
             try (InputStream fileStream = new FileInputStream(appSettingsFileName)) {
                 return objectMapper.readValue(fileStream, AppSettings.class);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error("Unable to load settings");
             }
         }
         return new AppSettings();

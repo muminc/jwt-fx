@@ -27,8 +27,9 @@ public class TestInputWindow extends BorderPane {
 
     @FXML CheckBox useClientCertificate;
 
+    @FXML CheckBox nativeKeyStore;
 
-    @FXML CheckBox allowUnrestrictedRedirect;
+    @FXML CheckBox allowCircularRedirect;
 
     @FXML
     Button executeButton;
@@ -51,9 +52,9 @@ public class TestInputWindow extends BorderPane {
         redirectURI.textProperty().bindBidirectional(jwtWindowModel.redirectURIProperty());
         useKerberos.selectedProperty().bindBidirectional(jwtWindowModel.kerberosProperty());
         useClientCertificate.selectedProperty().bindBidirectional(jwtWindowModel.clientCertificateProperty());
-        allowUnrestrictedRedirect.selectedProperty().bindBidirectional(jwtWindowModel.unrestrictedRedirectProperty());
+        nativeKeyStore.selectedProperty().bindBidirectional(jwtWindowModel.nativeKeystoreProperty());
+        allowCircularRedirect.selectedProperty().bindBidirectional(jwtWindowModel.allowCircularRedirectProperty());
         setTextLimit(sessionName,20);
-
     }
 
 

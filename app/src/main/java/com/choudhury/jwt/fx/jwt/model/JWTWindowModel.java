@@ -18,7 +18,8 @@ public class JWTWindowModel {
     private final StringProperty redirectURI = new SimpleStringProperty();
     private final BooleanProperty kerberos = new SimpleBooleanProperty();
     private final BooleanProperty clientCertificate = new SimpleBooleanProperty();
-    private final BooleanProperty unrestrictedRedirect = new SimpleBooleanProperty();
+    private final BooleanProperty nativeKeystore = new SimpleBooleanProperty();
+    private final BooleanProperty allowCircularRedirect = new SimpleBooleanProperty();
 
 
     private TaskModel taskModel;
@@ -41,7 +42,8 @@ public class JWTWindowModel {
         redirectURI.setValue(windowSettings.getRedirectURI());
         kerberos.setValue(windowSettings.isKerberos());
         clientCertificate.setValue(windowSettings.isClientCertificate());
-        unrestrictedRedirect.setValue(windowSettings.isUnrestrictedRedirect());
+        nativeKeystore.set(windowSettings.isNativeKeyStore());
+        allowCircularRedirect.setValue(windowSettings.isAllowCircularRedirect());
     }
 
 
@@ -114,12 +116,21 @@ public class JWTWindowModel {
         return clientCertificate;
     }
 
-    public boolean isUnrestrictedRedirect() {
-        return unrestrictedRedirect.get();
+
+    public boolean isNativeKeystore() {
+        return nativeKeystore.get();
     }
 
-    public BooleanProperty unrestrictedRedirectProperty() {
-        return unrestrictedRedirect;
+    public BooleanProperty nativeKeystoreProperty() {
+        return nativeKeystore;
+    }
+
+    public boolean isAllowCircularRedirect() {
+        return allowCircularRedirect.get();
+    }
+
+    public BooleanProperty allowCircularRedirectProperty() {
+        return allowCircularRedirect;
     }
 
     public void updateConfig(WindowSettings windowSettings){
@@ -131,14 +142,15 @@ public class JWTWindowModel {
 
         windowSettings.setKerberos(kerberos.getValue());
         windowSettings.setClientCertificate(clientCertificate.getValue());
-        windowSettings.setUnrestrictedRedirect(unrestrictedRedirect.getValue());
+        windowSettings.setNativeKeyStore(nativeKeystore.getValue());
+        windowSettings.setAllowCircularRedirect(allowCircularRedirect.getValue());
     }
 
     public String obtainToken(){
         if (jwtService==null){
             throw new RuntimeException("No JWT Service Implementation has been registered");
         }
-        return jwtService.obtainToken(getOauthURI(), getRedirectURI(), getClientId(), getScope(), isKerberos(), isClientCertificate(), isUnrestrictedRedirect());
+        return jwtService.obtainToken(getOauthURI(), getRedirectURI(), getClientId(), getScope(), isKerberos(), isClientCertificate(),isNativeKeystore(), isAllowCircularRedirect());
     }
 
 

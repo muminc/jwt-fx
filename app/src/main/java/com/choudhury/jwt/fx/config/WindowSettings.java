@@ -13,7 +13,8 @@ public class WindowSettings {
 
     private boolean kerberos;
     private boolean clientCertificate;
-    private boolean unrestrictedRedirect;
+    private boolean nativeKeyStore;
+    private boolean allowCircularRedirect;
 
 
 

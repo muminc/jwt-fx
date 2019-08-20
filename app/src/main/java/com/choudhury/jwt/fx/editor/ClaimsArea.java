@@ -33,7 +33,7 @@ public class ClaimsArea extends BorderPane {
         area = new StyleClassedTextArea();
 
         area.getStylesheets().add(ClaimsArea.class.getResource("/css/manual-highlighting.css").toExternalForm());
-        area.setStyle("-fx-font-size: 18pt;");
+        area.setId("claims-area");
 
         area.setEditable(false);
         area.textProperty().addListener(new ChangeListener<String>() {

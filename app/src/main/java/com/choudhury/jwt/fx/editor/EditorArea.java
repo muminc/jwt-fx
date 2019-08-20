@@ -18,7 +18,7 @@ public class EditorArea extends BorderPane {
 
         area = new StyleClassedTextArea();
         area.getStylesheets().add(ClaimsArea.class.getResource("/css/manual-highlighting.css").toExternalForm());
-        area.setStyle("-fx-font-size: 20pt");
+        area.setId("token-input");
         area.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

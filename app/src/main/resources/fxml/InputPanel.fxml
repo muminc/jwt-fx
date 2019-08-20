@@ -64,8 +64,9 @@
 <!--                </ChoiceBox>-->
 
 <!--                <VBox minWidth="30" />-->
+                <CheckBox  fx:id="nativeKeyStore" text="Native OS Keystore" alignment="BOTTOM_CENTER"/>
 
-                 <CheckBox  fx:id="allowUnrestrictedRedirect" text="Unrestricted Redirect" />
+                 <CheckBox  fx:id="allowCircularRedirect" text="Allow Circular Redirect" />
              </HBox>
 
              <Button text="Execute [F5]"  fx:id="executeButton" onAction="#execute" GridPane.rowIndex="5" GridPane.columnIndex="5" GridPane.halignment="RIGHT"></Button>

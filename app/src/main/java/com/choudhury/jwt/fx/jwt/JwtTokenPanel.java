@@ -33,10 +33,10 @@ public class JwtTokenPanel extends BorderPane {
         SplitPane jwtParts = new SplitPane();
         jwtParts.setOrientation(Orientation.VERTICAL);
         TextArea algorithm = new TextArea();
+        algorithm.setId("algorithm");
         ClaimsArea body = new ClaimsArea();
         SignatureArea signatureArea = new SignatureArea();
 
-        algorithm.setStyle("-fx-font-size: 12pt; -fx-text-fill: red");
         algorithm.setEditable(false);
         jwtParts.getItems().add(algorithm);
         jwtParts.getItems().add(body);
@@ -51,7 +51,7 @@ public class JwtTokenPanel extends BorderPane {
 
         BorderPane mainContent = new BorderPane();
         inputWindow = new TestInputWindow(jwtWindowModel);
-        //mainContent.setTop(inputWindow);
+        mainContent.setTop(inputWindow);
         mainContent.setCenter(horizontalSplit);
 
 
