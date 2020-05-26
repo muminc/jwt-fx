@@ -5,3 +5,12 @@ Multi-Tabbed JWT Token Debugger Written in JavaFX 11
 #Screenshot
 
 ![alt text](screenshot.png)
+
+
+<h2>Building</h2>
+
+```
+mvn clean install 
+```
+
+Distributions  (.zip or .tar.gz) can be found under dist/target folder
