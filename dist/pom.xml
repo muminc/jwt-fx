@@ -25,7 +25,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>1.7.25</version>
+                <version>2.1.1</version>
                 <executions>
                     <execution>
                         <id>l4j-clui</id>
@@ -90,7 +90,7 @@
             <plugin>
                 <groupId>com.igormaznitsa</groupId>
                 <artifactId>mvn-jlink-wrapper</artifactId>
-                <version>1.0.3</version>
+                <version>1.1.0</version>
                 <configuration>
                     <!-- <modulePath>${env.JAVAFX_MODS}</modulePath> -->
                     <addModules>
@@ -132,8 +132,8 @@
                             <output>${project.build.directory}${file.separator}jre-win64</output>
                             <provider>BELLSOFT</provider>
                             <providerConfig>
-                                <version>11.0.4</version>
-                                <arch>amd64</arch>
+                                <version>11.0.12+7</version>
+                                <arch>amd64-full</arch>
                                 <type>jdk</type>
                                 <os>windows</os>
                             </providerConfig>

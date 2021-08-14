@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.fxmisc.richtext</groupId>
             <artifactId>richtextfx</artifactId>
-            <version>0.10.1</version>
+            <version>0.10.6</version>
         </dependency>
 
         <dependency>
@@ -47,26 +47,26 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.10.4</version>
+            <version>2.10.5</version>
 
         </dependency>
 
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>3.8.1</version>
+            <version>3.18.1</version>
         </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.10.7</version>
+            <version>0.11.2</version>
         </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.10.7</version>
+            <version>0.11.2</version>
         </dependency>
 
         <dependency>
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.60</version>
+            <version>1.67</version>
         </dependency>
 
         <dependency>
