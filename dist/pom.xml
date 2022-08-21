@@ -111,7 +111,7 @@
                         <addModule>jdk.xml.dom</addModule>
                         <addModule>javafx.controls</addModule>
                         <addModule>javafx.fxml</addModule>
-                        <addModule>jdk.scripting.nashorn</addModule>
+<!--                        <addModule>jdk.scripting.nashorn</addModule>-->
                         <addModule>java.security.jgss</addModule>
                         <addModule>jdk.crypto.mscapi</addModule>
                     </addModules>
@@ -132,7 +132,7 @@
                             <output>${project.build.directory}${file.separator}jre-win64</output>
                             <provider>BELLSOFT</provider>
                             <providerConfig>
-                                <version>11.0.12+7</version>
+                                <version>17.0.4.1+1</version>
                                 <arch>amd64-full</arch>
                                 <type>jdk</type>
                                 <os>windows</os>

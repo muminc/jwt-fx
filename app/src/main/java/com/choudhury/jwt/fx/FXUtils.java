@@ -9,8 +9,8 @@ public class FXUtils {
 
 
     @SneakyThrows
-    public static <T, R extends Node> R loadAndInitialize(String file, T controller){
-        FXMLLoader loader = new FXMLLoader(FXUtils.class.getResource(file));
+    public static <T, R extends Node> R loadAndInitialize(Class clazz, String file, T controller){
+        FXMLLoader loader = new FXMLLoader(clazz.getResource(file));
         loader.setControllerFactory(c -> controller);
         R root = loader.load();
         // to prevent GCing of controller

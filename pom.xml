@@ -1,19 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.choudhury.jwt-fx</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <properties>
+        <lombok.version>1.18.24</lombok.version>
+        <jackson.version>2.13.3</jackson.version>
+    </properties>
     <packaging>pom</packaging>
     <name>jwt-fx-parent</name>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <description>JWT FX Parent</description>
 
@@ -67,7 +63,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.20</version>
+                <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -80,43 +76,43 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.4.2</version>
+                <version>5.8.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-params</artifactId>
-                <version>5.4.2</version>
+                <version>5.8.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.4.2</version>
+                <version>5.8.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.testfx</groupId>
                 <artifactId>testfx-junit5</artifactId>
-                <version>4.0.15-alpha</version>
+                <version>4.0.16-alpha</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>net.java.dev.jna</groupId>
                 <artifactId>jna</artifactId>
-                <version>5.4.0</version>
+                <version>5.8.0</version>
             </dependency>
             <dependency>
                 <groupId>net.java.dev.jna</groupId>
                 <artifactId>jna-platform</artifactId>
-                <version>5.4.0</version>
+                <version>5.8.0</version>
             </dependency>
 
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.10.5</version>
+                <version>${jackson.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -143,7 +139,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.10.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -158,9 +154,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <release>11</release>
-                    <source>11</source>
-                    <target>11</target>
+                    <release>17</release>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

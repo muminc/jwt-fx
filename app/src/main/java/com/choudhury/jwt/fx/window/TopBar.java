@@ -34,7 +34,7 @@ public class TopBar extends BorderPane {
   public TopBar() {
 
     //---------------------FXML LOADER---------------------------------
-    URL resource = getClass().getResource( "/fxml/TopBar.fxml");
+    URL resource = getClass().getResource( "/com/choudhury/jwt/fx/fxml/TopBar.fxml");
     FXMLLoader loader = new FXMLLoader(resource);
     loader.setController(this);
     loader.setRoot(this);

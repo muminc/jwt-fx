@@ -32,7 +32,7 @@ public class ClaimsArea extends BorderPane {
 
         area = new StyleClassedTextArea();
 
-        area.getStylesheets().add(ClaimsArea.class.getResource("/css/manual-highlighting.css").toExternalForm());
+        area.getStylesheets().add(ClaimsArea.class.getResource("/com/choudhury/jwt/fx/css/manual-highlighting.css").toExternalForm());
         area.setId("claims-area");
 
         area.setEditable(false);

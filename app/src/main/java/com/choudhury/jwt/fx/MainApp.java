@@ -30,7 +30,7 @@ import java.util.ServiceLoader;
 
 public class MainApp extends Application {
 
-    private Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private Logger logger = LoggerFactory.getLogger(MainApp.class);
 
     public static Stage window;
 
@@ -72,40 +72,45 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        try {
 
-        topBar = new TopBar();
-        root = new BorderPane();
-        root.setStyle("-fx-border-color: black; -fx-border-width: 1px");
+            topBar = new TopBar();
+            root = new BorderPane();
+            root.setStyle("-fx-border-color: black; -fx-border-width: 1px");
 
-        root.setTop(topBar);
+            root.setTop(topBar);
 
 
-        tabPaneWithAdd = new JWTTabPane(jwtService, appSettings);
-        root.setCenter(new AddButtonOverlay(tabPaneWithAdd));
+            tabPaneWithAdd = new JWTTabPane(jwtService, appSettings);
+            root.setCenter(new AddButtonOverlay(tabPaneWithAdd));
 
-        CustomStage stage = new CustomStage(StageStyle.UNDECORATED);
+            CustomStage stage = new CustomStage(StageStyle.UNDECORATED);
 
-        //Prepare the Stage
-        window = stage;
-        window.setTitle("JWT Tool");
-        window.setWidth(600);
-        window.setHeight(800);
-        window.centerOnScreen();
-        //window.getIcons().add(InfoTool.getImageFromResourcesFolder("logo.png"));
-        window.centerOnScreen();
-        window.setOnCloseRequest(cl -> Platform.exit());
+            //Prepare the Stage
+            window = stage;
+            window.setTitle("JWT Tool");
+            window.setWidth(600);
+            window.setHeight(800);
+            window.centerOnScreen();
+            //window.getIcons().add(InfoTool.getImageFromResourcesFolder("logo.png"));
+            window.centerOnScreen();
+            window.setOnCloseRequest(cl -> Platform.exit());
 
-        // Borderless Scene
-        borderlessScene = new BorderlessScene(window, StageStyle.UNDECORATED, root, screenMinWidth, screenMinHeight);
-        ObservableList<String> stylesheets = borderlessScene.getRoot().getStylesheets();
-        stylesheets.clear();
-        borderlessScene.getStylesheets().add(getClass().getResource("/css/application-custom.css").toExternalForm());
-        borderlessScene.setMoveControl(topBar);
-        window.setScene(borderlessScene);
-        stage.getIcons().add(new Image("/images/ticket-32.png"));
+            // Borderless Scene
+            borderlessScene = new BorderlessScene(window, StageStyle.UNDECORATED, root, screenMinWidth, screenMinHeight);
+            ObservableList<String> stylesheets = borderlessScene.getRoot().getStylesheets();
+            stylesheets.clear();
+            borderlessScene.getStylesheets().add(MainApp.class.getResource("/com/choudhury/jwt/fx/css/application-custom.css").toExternalForm());
+            borderlessScene.setMoveControl(topBar);
+            window.setScene(borderlessScene);
+            stage.getIcons().add(new Image(MainApp.class.getResourceAsStream("/images/ticket-32.png")));
 
-        topBar.textProperty().bind(window.titleProperty());
-        stage.showAndAdjust();
+            topBar.textProperty().bind(window.titleProperty());
+            stage.showAndAdjust();
+        }
+        catch (Throwable e){
+            e.printStackTrace();
+        }
     }
 
     @Override

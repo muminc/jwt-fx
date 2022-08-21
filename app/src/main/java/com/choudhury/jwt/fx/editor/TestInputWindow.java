@@ -13,37 +13,40 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 
 
 public class TestInputWindow extends BorderPane {
 
-    @FXML TextField sessionName;
-    @FXML TextField clientId;
-    @FXML TextField scope;
-    @FXML TextField oauthURI;
-    @FXML TextField redirectURI;
+    // TODO had to make public to work with modules, fix this to be package protected
 
-    @FXML CheckBox useKerberos;
+    @FXML public TextField sessionName;
+    @FXML public TextField clientId;
+    @FXML public TextField scope;
+    @FXML public TextField oauthURI;
+    @FXML public TextField redirectURI;
 
-    @FXML CheckBox useClientCertificate;
+    @FXML public CheckBox useKerberos;
 
-    @FXML CheckBox nativeKeyStore;
+    @FXML public CheckBox useClientCertificate;
 
-    @FXML CheckBox allowCircularRedirect;
+    @FXML public CheckBox nativeKeyStore;
 
-    @FXML
-    Button executeButton;
+    @FXML public CheckBox allowCircularRedirect;
+
+    @FXML public Button executeButton;
 
 
 
 
     private JWTWindowModel jwtWindowModel;
 
-    public TestInputWindow(JWTWindowModel jwtWindowModel) {
+    public TestInputWindow(JWTWindowModel jwtWindowModel)  {
         this.jwtWindowModel = jwtWindowModel;
 
         setPadding(new Insets(4));
-        Node node = FXUtils.loadAndInitialize("/fxml/InputPanel.fxml", this);
+        Node node = FXUtils.loadAndInitialize(TestInputWindow.class,"/com/choudhury/jwt/fx/editor/TestInputPanel.fxml", this);
+
         setCenter(node);
         sessionName.textProperty().bindBidirectional(jwtWindowModel.sessionProperty());
         clientId.textProperty().bindBidirectional(jwtWindowModel.clientIdProperty());

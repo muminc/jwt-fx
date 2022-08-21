@@ -17,7 +17,7 @@ public class EditorArea extends BorderPane {
     public EditorArea() {
 
         area = new StyleClassedTextArea();
-        area.getStylesheets().add(ClaimsArea.class.getResource("/css/manual-highlighting.css").toExternalForm());
+        area.getStylesheets().add(ClaimsArea.class.getResource("/com/choudhury/jwt/fx/css/manual-highlighting.css").toExternalForm());
         area.setId("token-input");
         area.textProperty().addListener(new ChangeListener<String>() {
             @Override

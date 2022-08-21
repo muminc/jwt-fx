@@ -30,7 +30,7 @@ public class CloseAppBox extends StackPane {
   public CloseAppBox() {
 
     // ------------------------------------FXMLLOADER ----------------------------------------
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CloseAppBox.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/choudhury/jwt/fx/fxml/CloseAppBox.fxml"));
     loader.setController(this);
     loader.setRoot(this);
 

@@ -1,34 +1,36 @@
 package com.choudhury.jwt.fx.impl;
 
 import com.choudhury.jwt.fx.jwt.api.JWTService;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.RequestLine;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultRedirectStrategy;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.WinHttpClients;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.ssl.PrivateKeyDetails;
-import org.apache.http.ssl.PrivateKeyStrategy;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.util.EntityUtils;
+
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.impl.win.WinHttpClients;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.net.URLEncodedUtils;
+import org.apache.hc.core5.ssl.PrivateKeyDetails;
+import org.apache.hc.core5.ssl.PrivateKeyStrategy;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.net.Socket;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -76,7 +78,7 @@ public class SSOJWTServiceImpl implements JWTService {
             if (clientCertificates) {
                 sslContext = SSLContexts.custom().loadKeyMaterial(keyStore, null, new PrivateKeyStrategy() {
                     @Override
-                    public String chooseAlias(Map<String, PrivateKeyDetails> aliases, Socket socket) {
+                    public String chooseAlias(Map<String, PrivateKeyDetails> aliases,  SSLParameters sslParameters) {
                         for (String alias : aliases.keySet()) {
                             PrivateKeyDetails privateKeyDetails = aliases.get(alias);
                             for (X509Certificate certificate : privateKeyDetails.getCertChain()) {
@@ -106,24 +108,26 @@ public class SSOJWTServiceImpl implements JWTService {
             SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,
                     new String[]{"TLSv1.2", "TLSv1.1"},
                     null,
-                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+                    NoopHostnameVerifier.INSTANCE);
 
 
             RequestConfig config = RequestConfig.custom().setCircularRedirectsAllowed(allowCircularRedirect).build();
+
+            final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
+                    .setSSLSocketFactory(sslConnectionSocketFactory)
+                    .build();
 
 
             final HttpClientBuilder builder = kerberos ? WinHttpClients.custom() : HttpClients.custom();
 
             CloseableHttpClient client = builder
-                    .setSSLSocketFactory(sslConnectionSocketFactory)
-                    .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                    .setConnectionManager(cm)
                     .setDefaultRequestConfig(config)
                     .setRedirectStrategy(new DefaultRedirectStrategy() {
                         @Override
                         public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) {
-                            final RequestLine requestLine = request.getRequestLine();
-                            String uri = requestLine.getUri();
-                            final boolean containsAccessToken = requestLine.getUri().contains(accessTokenTokenIdentifier);
+                            String uri = request.getRequestUri();
+                            final boolean containsAccessToken = uri.contains(accessTokenTokenIdentifier);
                             if (containsAccessToken){
                                 List<NameValuePair> parse = URLEncodedUtils.parse(uri, Charset.defaultCharset());
                                 for (NameValuePair nameValuePair : parse) {
