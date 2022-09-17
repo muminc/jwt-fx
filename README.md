@@ -1,5 +1,5 @@
 <h1> jwt-fx </h1>
-Multi-Tabbed JWT Token Debugger Written in JavaFX 11
+Multi-Tabbed JWT Token Debugger Written in ~~JavaFX 11~~ updated for JavaFX 17
 
 
 #Screenshot
