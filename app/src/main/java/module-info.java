@@ -31,15 +31,15 @@ module app {
 
 
 
-    opens com.choudhury.jwt.fx.editor to javafx.xml;
-    opens com.choudhury.jwt.fx.config to javafx.xml;
+    opens com.choudhury.jwt.fx.editor to javafx.fxml;
+    opens com.choudhury.jwt.fx.config to javafx.fxml;
 
-    opens com.choudhury.jwt.fx.impl to javafx.xml;
+    opens com.choudhury.jwt.fx.impl to javafx.fxml;
 
-    opens com.choudhury.jwt.fx to javafx.xml;
-    opens com.choudhury.jwt.fx.jwt to javafx.xml;
-    opens com.choudhury.jwt.fx.jwt.api to javafx.xml;
-    opens com.choudhury.jwt.fx.jwt.model to javafx.xml;
+    opens com.choudhury.jwt.fx to javafx.fxml;
+    opens com.choudhury.jwt.fx.jwt to javafx.fxml;
+    opens com.choudhury.jwt.fx.jwt.api to javafx.fxml;
+    opens com.choudhury.jwt.fx.jwt.model to javafx.fxml;
     opens com.choudhury.jwt.fx.window to javafx.fxml;
 
 
