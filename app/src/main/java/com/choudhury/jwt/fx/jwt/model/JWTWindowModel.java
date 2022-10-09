@@ -1,12 +1,16 @@
 package com.choudhury.jwt.fx.jwt.model;
 
 import com.choudhury.jwt.fx.config.WindowSettings;
+import com.choudhury.jwt.fx.impl.PkceUtils;
 import com.choudhury.jwt.fx.jwt.api.JWTService;
+import com.choudhury.jwt.fx.jwt.api.TokenRequestSettings;
 import com.choudhury.jwt.fx.model.TaskModel;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.List;
+import java.util.Objects;
 
 
 public class JWTWindowModel {
@@ -15,11 +19,18 @@ public class JWTWindowModel {
     private final StringProperty scope = new SimpleStringProperty();
     private final StringProperty clientId = new SimpleStringProperty();
     private final StringProperty oauthURI = new SimpleStringProperty();
+
+    private final StringProperty tokenURI = new SimpleStringProperty();
     private final StringProperty redirectURI = new SimpleStringProperty();
     private final BooleanProperty kerberos = new SimpleBooleanProperty();
     private final BooleanProperty clientCertificate = new SimpleBooleanProperty();
     private final BooleanProperty nativeKeystore = new SimpleBooleanProperty();
     private final BooleanProperty allowCircularRedirect = new SimpleBooleanProperty();
+
+    private final ObjectProperty<GrantType> grantType = new ReadOnlyObjectWrapper<>();
+
+    private ObservableList<GrantType> grantTypes = FXCollections.observableList(List.of(GrantType.values()));
+
 
 
     private TaskModel taskModel;
@@ -40,6 +51,10 @@ public class JWTWindowModel {
         scope.setValue(windowSettings.getScope());
         oauthURI.setValue(windowSettings.getOauthURI());
         redirectURI.setValue(windowSettings.getRedirectURI());
+        tokenURI.setValue(windowSettings.getTokenURI());
+        if (Objects.nonNull(windowSettings.getGrantType())) {
+            grantType.setValue(GrantType.valueOf(windowSettings.getGrantType()));
+        }
         kerberos.setValue(windowSettings.isKerberos());
         clientCertificate.setValue(windowSettings.isClientCertificate());
         nativeKeystore.set(windowSettings.isNativeKeyStore());
@@ -133,12 +148,41 @@ public class JWTWindowModel {
         return allowCircularRedirect;
     }
 
+    public String getTokenURI() {
+        return tokenURI.get();
+    }
+
+    public StringProperty tokenURIProperty() {
+        return tokenURI;
+    }
+
+    public void setTokenURI(String tokenURI) {
+        this.tokenURI.set(tokenURI);
+    }
+
+    public ObservableList<GrantType> getGrantTypes() {
+        return grantTypes;
+    }
+
+    public GrantType getGrantType() {
+        return grantType.get();
+    }
+
+    public ObjectProperty<GrantType> grantTypeProperty() {
+        return grantType;
+    }
+
     public void updateConfig(WindowSettings windowSettings){
         windowSettings.setSession(session.getValue());
         windowSettings.setScope(scope.getValue());
         windowSettings.setClientId(clientId.getValue());
         windowSettings.setOauthURI(oauthURI.getValue());
         windowSettings.setRedirectURI(redirectURI.getValue());
+        windowSettings.setTokenURI(tokenURI.getValue());
+        if (Objects.nonNull(grantType.getValue())) {
+            windowSettings.setGrantType(grantType.getValue().name());
+        }
+        windowSettings.setTokenURI(tokenURI.getValue());
 
         windowSettings.setKerberos(kerberos.getValue());
         windowSettings.setClientCertificate(clientCertificate.getValue());
@@ -150,7 +194,24 @@ public class JWTWindowModel {
         if (jwtService==null){
             throw new RuntimeException("No JWT Service Implementation has been registered");
         }
-        return jwtService.obtainToken(getOauthURI(), getRedirectURI(), getClientId(), getScope(), isKerberos(), isClientCertificate(),isNativeKeystore(), isAllowCircularRedirect());
+        GrantType grantType = getGrantType();
+        String codeChallenge="";
+        String codeVerifier="";
+        if (grantType == GrantType.PCKE){
+            try {
+                codeVerifier = PkceUtils.generateCodeVerifier();
+                codeChallenge = PkceUtils.generateCodeChallenge(codeVerifier);
+            }
+            catch (Exception e){
+                throw new RuntimeException("Unable to generate code verifier/challenge",e);
+            }
+        }
+
+        TokenRequestSettings tokenRequestSettings=new TokenRequestSettings(grantType,getOauthURI(),
+                getTokenURI(),getRedirectURI(),getClientId(),getScope()
+                ,isKerberos(),isClientCertificate(),isNativeKeystore(),isAllowCircularRedirect(),codeChallenge,codeVerifier);
+
+        return jwtService.obtainToken(tokenRequestSettings);
     }
 
 

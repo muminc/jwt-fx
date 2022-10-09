@@ -34,7 +34,7 @@ module app {
     opens com.choudhury.jwt.fx.editor to javafx.fxml;
     opens com.choudhury.jwt.fx.config to javafx.fxml;
 
-    opens com.choudhury.jwt.fx.impl to javafx.fxml;
+    opens com.choudhury.jwt.fx.impl to javafx.fxml, com.fasterxml.jackson.databind;
 
     opens com.choudhury.jwt.fx to javafx.fxml;
     opens com.choudhury.jwt.fx.jwt to javafx.fxml;

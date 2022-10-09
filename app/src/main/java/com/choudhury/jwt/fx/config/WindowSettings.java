@@ -9,7 +9,9 @@ public class WindowSettings {
     private String scope;
     private String clientId;
     private String oauthURI;
+    private String tokenURI;
     private String redirectURI;
+    private String grantType;
 
     private boolean kerberos;
     private boolean clientCertificate;

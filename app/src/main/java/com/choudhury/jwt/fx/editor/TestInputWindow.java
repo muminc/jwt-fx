@@ -1,41 +1,43 @@
 package com.choudhury.jwt.fx.editor;
 
 import com.choudhury.jwt.fx.FXUtils;
+import com.choudhury.jwt.fx.jwt.model.GrantType;
 import com.choudhury.jwt.fx.jwt.model.JWTWindowModel;
+import com.choudhury.jwt.fx.model.TaskModel;
 import javafx.application.Platform;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
-import java.io.IOException;
 
 
 public class TestInputWindow extends BorderPane {
 
-    // TODO had to make public to work with modules, fix this to be package protected
 
-    @FXML public TextField sessionName;
-    @FXML public TextField clientId;
-    @FXML public TextField scope;
-    @FXML public TextField oauthURI;
-    @FXML public TextField redirectURI;
+    @FXML TextField sessionName;
+    @FXML TextField clientId;
+    @FXML TextField scope;
+    @FXML TextField oauthURI;
 
-    @FXML public CheckBox useKerberos;
+    @FXML TextField tokenURI;
 
-    @FXML public CheckBox useClientCertificate;
+    @FXML TextField redirectURI;
 
-    @FXML public CheckBox nativeKeyStore;
+    @FXML CheckBox useKerberos;
 
-    @FXML public CheckBox allowCircularRedirect;
+    @FXML CheckBox useClientCertificate;
 
-    @FXML public Button executeButton;
+    @FXML CheckBox nativeKeyStore;
 
+    @FXML CheckBox allowCircularRedirect;
+
+    @FXML Button executeButton;
+
+    @FXML ChoiceBox<GrantType> grantTypes;
 
 
 
@@ -52,11 +54,17 @@ public class TestInputWindow extends BorderPane {
         clientId.textProperty().bindBidirectional(jwtWindowModel.clientIdProperty());
         scope.textProperty().bindBidirectional(jwtWindowModel.scopeProperty());
         oauthURI.textProperty().bindBidirectional(jwtWindowModel.oauthURIProperty());
+        tokenURI.textProperty().bindBidirectional(jwtWindowModel.tokenURIProperty());
         redirectURI.textProperty().bindBidirectional(jwtWindowModel.redirectURIProperty());
         useKerberos.selectedProperty().bindBidirectional(jwtWindowModel.kerberosProperty());
         useClientCertificate.selectedProperty().bindBidirectional(jwtWindowModel.clientCertificateProperty());
         nativeKeyStore.selectedProperty().bindBidirectional(jwtWindowModel.nativeKeystoreProperty());
         allowCircularRedirect.selectedProperty().bindBidirectional(jwtWindowModel.allowCircularRedirectProperty());
+        grantTypes.setItems(jwtWindowModel.getGrantTypes());
+        grantTypes.setValue(jwtWindowModel.getGrantType());
+        grantTypes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> jwtWindowModel.grantTypeProperty().setValue(newValue));
+
+
         setTextLimit(sessionName,20);
     }
 
@@ -69,18 +77,20 @@ public class TestInputWindow extends BorderPane {
     }
 
     public void executeAction() {
-        jwtWindowModel.getTaskModel().setMessage("Trying To Obtain Token Please Wait...");
-        jwtWindowModel.getTaskModel().setRunning(true);
+        TaskModel taskModel = jwtWindowModel.getTaskModel();
+        taskModel.setMessage("Trying To Obtain Token Please Wait...");
+        taskModel.setRunning(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     String token = jwtWindowModel.obtainToken();
-                    Platform.runLater(()->{jwtWindowModel.getTaskModel().setRunning(false); jwtWindowModel.setJWTToken(token);});
+                    Platform.runLater(()->{
+                        taskModel.setRunning(false); jwtWindowModel.setJWTToken(token);});
                 }
                 catch (Exception e){
                     Platform.runLater(()-> {
-                        jwtWindowModel.getTaskModel().setRunning(false);
+                        taskModel.setRunning(false);
                         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                         errorAlert.setHeaderText("Unable to obtain token");
                         errorAlert.setContentText(e.getLocalizedMessage());

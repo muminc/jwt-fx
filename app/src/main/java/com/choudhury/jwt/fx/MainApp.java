@@ -100,7 +100,7 @@ public class MainApp extends Application {
             borderlessScene = new BorderlessScene(window, StageStyle.UNDECORATED, root, screenMinWidth, screenMinHeight);
             ObservableList<String> stylesheets = borderlessScene.getRoot().getStylesheets();
             stylesheets.clear();
-            borderlessScene.getStylesheets().add(MainApp.class.getResource("/com/choudhury/jwt/fx/css/application-custom.css").toExternalForm());
+            borderlessScene.getStylesheets().add(getClass().getResource("/com/choudhury/jwt/fx/css/application-custom.css").toExternalForm());
             borderlessScene.setMoveControl(topBar);
             window.setScene(borderlessScene);
             stage.getIcons().add(new Image(MainApp.class.getResourceAsStream("/images/ticket-32.png")));

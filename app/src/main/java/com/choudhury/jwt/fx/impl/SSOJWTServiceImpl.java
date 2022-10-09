@@ -2,8 +2,13 @@ package com.choudhury.jwt.fx.impl;
 
 import com.choudhury.jwt.fx.jwt.api.JWTService;
 
+import com.choudhury.jwt.fx.jwt.api.TokenRequestSettings;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -14,12 +19,12 @@ import org.apache.hc.client5.http.impl.win.WinHttpClients;
 import org.apache.hc.client5.http.io.HttpClientConnectionManager;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpRequest;
-import org.apache.hc.core5.http.HttpResponse;
-import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.message.BasicClassicHttpResponse;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.net.URIBuilder;
 import org.apache.hc.core5.net.URLEncodedUtils;
 import org.apache.hc.core5.ssl.PrivateKeyDetails;
 import org.apache.hc.core5.ssl.PrivateKeyStrategy;
@@ -30,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -40,17 +45,22 @@ import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class SSOJWTServiceImpl implements JWTService {
 
-    private Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private Logger logger = LoggerFactory.getLogger(SSOJWTServiceImpl.class.getName());
 
     private static final String EXTENDED_USAGE_IDENTIFIER = "1.3.6.1.5.5.7.3.2";
-    private static final String accessTokenTokenIdentifier="#access_token";
+    private static final String ACCESS_TOKEN_TOKEN_IDENTIFIER ="#access_token";
+
+    private static final String CODE="CODE";
+
     private static final String ALPHA_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+
 
 
     private Random random = new Random();
@@ -66,16 +76,17 @@ public class SSOJWTServiceImpl implements JWTService {
     }
 
     static class AccessTokenResult {
+        String code;
         String accessToken;
     }
 
     @Override
-    public String obtainToken(String url, String redirectURI, String clientId, String scope, boolean kerberos, boolean clientCertificates, boolean nativeKeyStore, boolean allowCircularRedirect) {
+    public String obtainToken(TokenRequestSettings tokenRequestSettings) {
         AccessTokenResult result = new AccessTokenResult();
         try {
-            KeyStore keyStore = loadKeyStore(nativeKeyStore);
+            KeyStore keyStore = loadKeyStore(tokenRequestSettings.isNativeKeyStore());
             SSLContext sslContext;
-            if (clientCertificates) {
+            if (tokenRequestSettings.isClientCertificate()) {
                 sslContext = SSLContexts.custom().loadKeyMaterial(keyStore, null, new PrivateKeyStrategy() {
                     @Override
                     public String chooseAlias(Map<String, PrivateKeyDetails> aliases,  SSLParameters sslParameters) {
@@ -111,14 +122,14 @@ public class SSOJWTServiceImpl implements JWTService {
                     NoopHostnameVerifier.INSTANCE);
 
 
-            RequestConfig config = RequestConfig.custom().setCircularRedirectsAllowed(allowCircularRedirect).build();
+            RequestConfig config = RequestConfig.custom().setCircularRedirectsAllowed(tokenRequestSettings.isAllowCircularRedirect()).build();
 
             final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
                     .setSSLSocketFactory(sslConnectionSocketFactory)
                     .build();
 
 
-            final HttpClientBuilder builder = kerberos ? WinHttpClients.custom() : HttpClients.custom();
+            final HttpClientBuilder builder = tokenRequestSettings.isKerberos() ? WinHttpClients.custom() : HttpClients.custom();
 
             CloseableHttpClient client = builder
                     .setConnectionManager(cm)
@@ -126,27 +137,57 @@ public class SSOJWTServiceImpl implements JWTService {
                     .setRedirectStrategy(new DefaultRedirectStrategy() {
                         @Override
                         public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context) {
-                            String uri = request.getRequestUri();
-                            final boolean containsAccessToken = uri.contains(accessTokenTokenIdentifier);
-                            if (containsAccessToken){
-                                List<NameValuePair> parse = URLEncodedUtils.parse(uri, Charset.defaultCharset());
-                                for (NameValuePair nameValuePair : parse) {
-                                    if (nameValuePair.getName().contains(accessTokenTokenIdentifier)) {
-                                        result.accessToken = nameValuePair.getValue();
+                            try {
+                                boolean containsCode = false;
+                                String uri = request.getRequestUri();
+                                if (tokenRequestSettings.isPCKE()) {
+                                    if (response.getCode() == 302 ){
+                                        Header location = response.getHeader("Location");
+                                        if (location.getValue().startsWith(tokenRequestSettings.getRedirectURI())){
+                                            List<NameValuePair> queryParams = new URIBuilder(location.getValue()).getQueryParams();
+                                            Optional<NameValuePair> code = queryParams.stream().filter(e -> e.getName().equalsIgnoreCase("code")).findFirst();
+                                            containsCode = code.isPresent();
+                                            result.code = code.get().getValue();
+                                        }
                                     }
+                                    return !containsCode;
+                                } else {
+
+                                    final boolean containsAccessToken = uri.contains(ACCESS_TOKEN_TOKEN_IDENTIFIER);
+                                    if (containsAccessToken) {
+                                        List<NameValuePair> parse = URLEncodedUtils.parse(uri, Charset.defaultCharset());
+                                        for (NameValuePair nameValuePair : parse) {
+                                            if (nameValuePair.getName().contains(ACCESS_TOKEN_TOKEN_IDENTIFIER)) {
+                                                result.accessToken = nameValuePair.getValue();
+                                            }
+                                        }
+                                    }
+                                    return !containsAccessToken;
                                 }
                             }
-                            return !containsAccessToken;
+                            catch (URISyntaxException | ProtocolException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     })
                     .build();
 
-            final String clientIdEncoded = encodeValue(clientId);
+            final String clientIdEncoded = encodeValue(tokenRequestSettings.getClientId());
             final String state = generateString();
-            final String redirectURIEncoded = encodeValue(redirectURI);
-            final String scopeEncoded = encodeValue(scope);
+            final String redirectURIEncoded = encodeValue(tokenRequestSettings.getRedirectURI());
+            final String scopeEncoded = encodeValue(tokenRequestSettings.getScope());
 
-            HttpGet request = new HttpGet(url+"?response_type=token&client_id="+clientIdEncoded+"&state="+state+"&redirect_uri="+redirectURIEncoded+"&scope="+scopeEncoded);
+
+
+            HttpGet request;
+
+            if (tokenRequestSettings.isPCKE()) {
+                request = new HttpGet(tokenRequestSettings.getAuthoriseURI() + "?response_type=code&client_id=" + clientIdEncoded + "&state=" + state + "&redirect_uri=" + redirectURIEncoded
+                        + "&scope=" + scopeEncoded+"&code_challenge_method=S256&code_challenge="+tokenRequestSettings.getCodeChallenge());
+                request.addHeader("SM_USER","user");
+            } else {
+                request = new HttpGet(tokenRequestSettings.getAuthoriseURI() + "?response_type=token&client_id=" + clientIdEncoded + "&state=" + state + "&redirect_uri=" + redirectURIEncoded + "&scope=" + scopeEncoded);
+            }
 
             CloseableHttpResponse execute = client.execute(request);
             final HttpEntity entity = execute.getEntity();
@@ -154,6 +195,10 @@ public class SSOJWTServiceImpl implements JWTService {
                 final String response = EntityUtils.toString(entity);
                 logger.debug("Response : "+response);
             }
+            if (tokenRequestSettings.isPCKE()){
+                result.accessToken = getAccessToken(tokenRequestSettings,result.code);
+            }
+
             if (result.accessToken == null){
                 throw new RuntimeException("Unable to obtain access token");
             }
@@ -163,8 +208,35 @@ public class SSOJWTServiceImpl implements JWTService {
             logger.error("Exception occurred",e);
             throw new RuntimeException(e.getMessage(),e);
         }
-
     }
+
+
+    private String getAccessToken(TokenRequestSettings tokenRequestSettings, String code){
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(tokenRequestSettings.getTokenURI());
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("client_id", tokenRequestSettings.getClientId()));
+        params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+        params.add(new BasicNameValuePair("redirect_uri", tokenRequestSettings.getRedirectURI()));
+        params.add(new BasicNameValuePair("code", code));
+        params.add(new BasicNameValuePair("scope", tokenRequestSettings.getScope()));
+        params.add(new BasicNameValuePair("code_verifier", tokenRequestSettings.getCodeVerifier()));
+        //params.add(new BasicNameValuePair("client_secret", "obscura"));
+        httpPost.setEntity(new UrlEncodedFormEntity(params));
+        CloseableHttpClient client = HttpClients.createDefault();
+        try {
+            CloseableHttpResponse response = client.execute(httpPost);
+            String json = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            //return json;
+            TokenResponse tokenResponse = objectMapper.readValue(json, TokenResponse.class);
+            return tokenResponse.getAccessToken();
+
+
+        } catch (IOException | ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private KeyStore loadKeyStore(boolean windowsKeyStore) throws GeneralSecurityException, IOException {
         KeyStore keyStore;
