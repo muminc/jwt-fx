@@ -1,7 +1,6 @@
 package com.choudhury.jwt.fx.impl;
 
 import com.choudhury.jwt.fx.jwt.api.JWTService;
-
 import com.choudhury.jwt.fx.jwt.api.TokenRequestSettings;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +20,6 @@ import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
-import org.apache.hc.core5.http.message.BasicClassicHttpResponse;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.net.URIBuilder;
@@ -49,12 +47,11 @@ import java.util.*;
 
 public class SSOJWTServiceImpl implements JWTService {
 
-    private Logger logger = LoggerFactory.getLogger(SSOJWTServiceImpl.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(SSOJWTServiceImpl.class.getName());
 
     private static final String EXTENDED_USAGE_IDENTIFIER = "1.3.6.1.5.5.7.3.2";
     private static final String ACCESS_TOKEN_TOKEN_IDENTIFIER ="#access_token";
 
-    private static final String CODE="CODE";
 
     private static final String ALPHA_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -63,7 +60,7 @@ public class SSOJWTServiceImpl implements JWTService {
 
 
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
 
     private String generateString() {
@@ -221,7 +218,6 @@ public class SSOJWTServiceImpl implements JWTService {
         params.add(new BasicNameValuePair("code", code));
         params.add(new BasicNameValuePair("scope", tokenRequestSettings.getScope()));
         params.add(new BasicNameValuePair("code_verifier", tokenRequestSettings.getCodeVerifier()));
-        //params.add(new BasicNameValuePair("client_secret", "obscura"));
         httpPost.setEntity(new UrlEncodedFormEntity(params));
         CloseableHttpClient client = HttpClients.createDefault();
         try {
