@@ -46,7 +46,7 @@ public class SignatureArea extends BorderPane {
 
     private void updateSignatureStatus(boolean status) {
         if (StringUtils.isEmpty(signatureTextArea.getText())){
-            signatureStatus.setText("Enter key to verify token signature");
+            signatureStatus.setText("Paste Public Key/Certificate to verify signature (must be PEM Encoded)");
             signatureStatus.setStyle("-fx-background-color: white; -fx-text-fill: black");
         }
         else if (status){

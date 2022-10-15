@@ -7,18 +7,21 @@ import com.choudhury.jwt.fx.KeyReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import org.apache.commons.lang3.StringUtils;
 import org.fxmisc.richtext.CaretSelectionBind;
 import org.fxmisc.richtext.GenericStyledArea;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import java.security.PublicKey;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -118,25 +121,30 @@ public class JWTEditorModel {
 
   private void processSignature(String algorithm, String token) {
     errorProperty.setValue("");
-    try {
-      boolean isUsingSecretkey = true;
-      if (!algorithm.contains("HS")) {
-        isUsingSecretkey = false;
-      }
+    String value = signature.getValue();
+    if (StringUtils.isNotEmpty(value)) {
+      try {
+        boolean isUsingSecretkey = true;
+        if (!algorithm.contains("HS")) {
+          isUsingSecretkey = false;
+        }
 
-      JwtParser parser = Jwts.parser();
+        JwtParserBuilder builder = Jwts.parserBuilder();
+        if (isUsingSecretkey) {
+          builder.setSigningKey(value.getBytes(StandardCharsets.UTF_8));
+        } else {
+          PublicKey publicKey = KeyReader.readCertificateOrPublicKey(value);
+          builder.setSigningKey(publicKey);
+        }
 
-      if (isUsingSecretkey) {
-        parser.setSigningKey(signature.getValue().getBytes(StandardCharsets.UTF_8));
-      } else {
-        parser.setSigningKey(KeyReader.readPublicKey(signature.get()));
+        JwtParser jwtParser = builder.build();
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+
+        signatureOkProperty.setValue(true);
+      } catch (Exception e) {
+        errorProperty.setValue(e.getMessage());
+        signatureOkProperty.setValue(false);
       }
-      Claims claims = parser
-              .parseClaimsJws(token).getBody();
-      signatureOkProperty.setValue(true);
-    } catch (Exception e) {
-      errorProperty.setValue(e.getMessage());
-      signatureOkProperty.setValue(false);
     }
   }
 

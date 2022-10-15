@@ -40,7 +40,7 @@ public class MainApp extends Application {
 
     public static BorderlessScene borderlessScene;
 
-    private final int screenMinWidth = 800, screenMinHeight = 600;
+    private final int screenMinWidth = 850, screenMinHeight = 600;
     private AppSettings appSettings;
 
     private ObjectMapper objectMapper = new ObjectMapper();
